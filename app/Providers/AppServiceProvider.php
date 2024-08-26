@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Repositories\BicycleRepository;
+use App\Repositories\BicycleRepositoryInterface;
+use App\Services\BicycleService;
 use Illuminate\Http\Response;
 use Illuminate\Support\ServiceProvider;
 
@@ -12,7 +15,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(BicycleRepositoryInterface::class, BicycleRepository::class);
+        $this->app->bind(BicycleService::class, function ($app) {
+            return new BicycleService($app->make(BicycleRepositoryInterface::class));
+        });
     }
 
     /**
